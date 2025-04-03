@@ -1,0 +1,43 @@
+/* task-item.component.scss */
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    border: var(--task-border);
+    transition: all 0.2s ease;
+    
+    &.active {
+      background-color: #FFFAF0;
+      border-color: #FFE9C2;
+    }
+  }
+  
+  .task-info {
+    .task-title {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    
+    .task-tags {
+      display: flex;
+      gap: 8px;
+    }
+  }
+  
+  .task-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    
+    .task-duration {
+      font-size: 16px;
+      font-weight: 600;
+      min-width: 60px;
+      text-align: right;
+    }
+  }

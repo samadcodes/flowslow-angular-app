@@ -1,0 +1,19 @@
+<!-- task-item.component.html -->
+<div class="task-item" [ngClass]="{'active': task.status === 'active'}">
+    <div class="task-info">
+      <h3 class="task-title">{{ task.title }}</h3>
+      <div class="task-tags">
+        <span class="tag" *ngFor="let tag of task.tags">{{ tag }}</span>
+      </div>
+    </div>
+    
+    <div class="task-controls">
+      <button 
+        class="btn" 
+        [ngClass]="task.status === 'active' ? 'btn-stop' : 'btn-start'"
+        (click)="toggleTaskStatus()">
+        {{ task.status === 'active' ? 'Stop' : 'Start' }}
+      </button>
+      <div class="task-duration">{{ task.duration }}</div>
+    </div>
+  </div>
