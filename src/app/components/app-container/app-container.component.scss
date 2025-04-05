@@ -17,30 +17,43 @@
   margin-bottom: 20px;
 }
 
+/* Progress card container - ensure it takes full height */
 .progress-card {
   height: 100%;
+  display: flex;
+  
+  /* Make app-progress-summary take full available height */
+  app-progress-summary {
+    display: flex;
+    flex: 1;
+    width: 100%;
+  }
 }
 
+/* Right section with work time and quote cards */
 .right-section {
   display: grid;
-  grid-template-rows: auto auto;
+  grid-template-rows: 1fr 1fr; /* Equal height distribution */
   gap: 20px;
   height: 100%;
 }
 
-.work-time-card {
-  flex-grow: 0;
-}
-
-.quote-card {
-  flex-grow: 0;
+.work-time-card, .quote-card {
+  display: flex;
+  
+  /* Make the components take full available height */
+  app-work-time-info, app-daily-quote {
+    display: flex;
+    flex: 1;
+    width: 100%;
+  }
 }
 
 @media (max-width: 992px) {
   .top-section {
     grid-template-columns: 1fr;
   }
-  
+
   .right-section {
     display: grid;
     grid-template-rows: auto auto;
@@ -52,12 +65,12 @@
   .dashboard-grid {
     padding: 10px 0;
   }
-  
+
   .top-section {
     gap: 15px;
     margin-bottom: 15px;
   }
-  
+
   .right-section {
     gap: 15px;
   }

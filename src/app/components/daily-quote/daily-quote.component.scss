@@ -1,27 +1,31 @@
 /* src/app/components/daily-quote/daily-quote.component.scss */
 .daily-quote {
-    text-align: center;
-    padding: 16px;
-    height: calc(100% - 32px); /* Subtract padding to ensure correct total height */
+  text-align: center;
+  padding: 16px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quote-content {
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--text-color);
+  font-style: italic;
+
+  .quote-mark {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 17px;
   }
-  
-  .quote-content {
-    font-size: 15px;
-    line-height: 1.4;
-    color: var(--text-color);
-    font-style: italic;
-    
-    .quote-mark {
-      color: var(--primary-color);
-      font-weight: 700;
-      font-size: 17px;
-    }
-    
-    .quote-author {
-      font-style: normal;
-      font-size: 13px;
-      color: #777;
-      display: inline-block;
-      margin-left: 5px;
-    }
+
+  .quote-author {
+    font-style: normal;
+    font-size: 13px;
+    color: #777;
+    display: inline-block;
+    margin-left: 5px;
   }
+}
