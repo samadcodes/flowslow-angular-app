@@ -1,9 +1,26 @@
-<!-- app-container.component.html -->
-<div class="app-container">
-    <app-navbar></app-navbar>
-    
-    <div class="container main-content">
-      <app-progress-summary></app-progress-summary>
-      <app-task-list></app-task-list>
+<!-- src/app/components/app-container/app-container.component.html -->
+<app-navbar></app-navbar>
+
+<div class="container">
+  <div class="dashboard-grid">
+    <!-- Top section with stats and info -->
+    <div class="top-section">
+      <div class="progress-card">
+        <app-progress-summary></app-progress-summary>
+      </div>
+      
+      <div class="right-section">
+        <div class="work-time-card">
+          <app-work-time-info></app-work-time-info>
+        </div>
+        
+        <div class="quote-card">
+          <app-daily-quote></app-daily-quote>
+        </div>
+      </div>
     </div>
+    
+    <!-- Task list section -->
+    <app-task-list></app-task-list>
   </div>
+</div>

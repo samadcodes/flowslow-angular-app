@@ -1,11 +1,45 @@
 <!-- task-list.component.html -->
 <div class="task-list-container">
-    <h2 class="section-title">Tasks</h2>
+  <div class="section-header">
+    <h2 class="section-title">Today's Tasks</h2>
+    <button class="btn-add-task" (click)="addNewTask()">
+      <span class="plus-icon">+</span>
+    </button>
+  </div>
+  
+  <div class="tasks">
+    <!-- New Task Input (shown when adding) -->
+    <div *ngIf="isAddingTask" class="task-item new-task-input">
+      <div class="task-info">
+        <input 
+          id="newTaskInput"
+          type="text" 
+          class="task-title-input" 
+          placeholder="What are you working on?"
+          [(ngModel)]="newTaskTitle"
+          (keydown)="onTaskInputKeydown($event)"
+          (blur)="onTaskInputBlur()"
+        >
+        <div class="task-tags">
+          <span class="tag-info">Press Enter to add task</span>
+        </div>
+      </div>
+      
+      <div class="task-controls">
+        <button class="btn btn-start" (click)="saveNewTask()">Add</button>
+        <div class="task-duration">0m</div>
+      </div>
+    </div>
     
-    <div class="tasks">
-      <app-task-item 
-        *ngFor="let task of tasks" 
-        [task]="task">
-      </app-task-item>
+    <!-- Task List -->
+    <app-task-item 
+      *ngFor="let task of tasks" 
+      [task]="task">
+    </app-task-item>
+    
+    <!-- Empty state when no tasks -->
+    <div *ngIf="tasks.length === 0 && !isAddingTask" class="empty-state">
+      <p>No tasks for today. Click the + button to add a task.</p>
     </div>
   </div>
+</div>

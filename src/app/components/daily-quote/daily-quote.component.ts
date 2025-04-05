@@ -1,19 +1,19 @@
-// src/app/components/progress-summary/progress-summary.component.ts
+// src/app/components/daily-quote/daily-quote.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskMockService } from '../../services/task-mock.service';
-import { DailyProgressStats } from '../../models/daily-progress-stats.model';
+import { DailyQuote } from '../../models/daily-quote.model';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-progress-summary',
+  selector: 'app-daily-quote',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './progress-summary.component.html',
-  styleUrls: ['./progress-summary.component.scss']
+  templateUrl: './daily-quote.component.html',
+  styleUrls: ['./daily-quote.component.scss']
 })
-export class ProgressSummaryComponent implements OnInit, OnDestroy {
-  progressStats: DailyProgressStats | null = null;
+export class DailyQuoteComponent implements OnInit, OnDestroy {
+  quote: DailyQuote | null = null;
   
   private subscription = new Subscription();
 
@@ -21,8 +21,8 @@ export class ProgressSummaryComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription.add(
-      this.taskService.progressStats$.subscribe(stats => {
-        this.progressStats = stats;
+      this.taskService.quote$.subscribe(quote => {
+        this.quote = quote;
       })
     );
   }

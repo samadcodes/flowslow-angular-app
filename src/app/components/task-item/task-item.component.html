@@ -1,19 +1,69 @@
 <!-- task-item.component.html -->
-<div class="task-item" [ngClass]="{'active': task.status === 'active'}">
-    <div class="task-info">
-      <h3 class="task-title">{{ task.title }}</h3>
-      <div class="task-tags">
-        <span class="tag" *ngFor="let tag of task.tags">{{ tag }}</span>
-      </div>
+<div class="task-item" 
+     [ngClass]="{'active': task.status === 'active'}"
+     [@taskAnimation]>
+  <div class="task-info">
+    <!-- Title (editable or display) -->
+    <div *ngIf="!isEditingTitle" class="task-title" (dblclick)="startEditingTitle()">
+      {{ task.title }}
+    </div>
+    <div *ngIf="isEditingTitle" class="task-title-edit">
+      <input 
+        [id]="'taskTitle' + task.id"
+        type="text" 
+        class="task-title-input" 
+        [(ngModel)]="editedTitle"
+        (keydown)="onTitleInputKeydown($event)"
+        (blur)="saveEditedTitle()"
+      >
     </div>
     
-    <div class="task-controls">
-      <button 
-        class="btn" 
-        [ngClass]="task.status === 'active' ? 'btn-stop' : 'btn-start'"
-        (click)="toggleTaskStatus()">
-        {{ task.status === 'active' ? 'Stop' : 'Start' }}
+    <!-- Tags -->
+    <div class="task-tags">
+      <span class="tag" *ngFor="let tag of task.tags">
+        {{ tag }}
+        <span class="tag-remove" (click)="removeTag(tag, $event)">×</span>
+      </span>
+      
+      <!-- Add tag button -->
+      <button class="add-tag-btn" (click)="toggleAddTag()" *ngIf="!isAddingTag">
+        <span class="plus-icon">+</span>
       </button>
-      <div class="task-duration">{{ task.duration }}</div>
+      
+      <!-- Tag input -->
+      <div class="tag-input-container" *ngIf="isAddingTag">
+        <input 
+          [id]="'tagInput' + task.id"
+          type="text" 
+          class="tag-input" 
+          [(ngModel)]="newTagName"
+          (input)="filterTags()"
+          (keydown)="onTagInputKeydown($event)"
+          placeholder="Add tag..."
+        >
+        
+        <!-- Dropdown for tag selection -->
+        <div class="tag-dropdown" *ngIf="filteredTags.length > 0">
+          <div 
+            class="tag-dropdown-item" 
+            *ngFor="let tag of filteredTags"
+            (click)="selectTag(tag)"
+            [class.used]="task.tags.includes(tag.name)"
+          >
+            {{ tag.name }}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+  
+  <div class="task-controls">
+    <button 
+      class="btn" 
+      [ngClass]="task.status === 'active' ? 'btn-stop' : 'btn-start'"
+      (click)="toggleTaskStatus()">
+      {{ task.status === 'active' ? 'Stop' : 'Start' }}
+    </button>
+    <div class="task-duration">{{ task.duration }}</div>
+  </div>
+</div>

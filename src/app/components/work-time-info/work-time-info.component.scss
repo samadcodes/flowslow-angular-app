@@ -1,0 +1,63 @@
+/* src/app/components/work-time-info/work-time-info.component.scss */
+.work-time-info {
+    padding: 20px;
+    height: calc(100% - 40px); /* Subtract padding to ensure correct total height */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .time-row {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .time-item {
+    text-align: center;
+    
+    .time-label {
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 6px;
+    }
+    
+    .time-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+  }
+  
+  .expected-time {
+    margin-top: auto;
+    padding: 10px 14px;
+    background-color: #F8F9FA;
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    
+    .info-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background-color: #E9ECEF;
+      color: #495057;
+      font-style: italic;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    
+    .info-text {
+      font-size: 13px;
+      color: #495057;
+      line-height: 1.4;
+      
+      strong {
+        font-weight: 600;
+        color: var(--text-color);
+      }
+    }
+  }

@@ -1,52 +1,78 @@
 // task-list.component.ts
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { TaskItemComponent } from '../task-item/task-item.component';
-
-interface Task {
-  id: number;
-  title: string;
-  tags: string[];
-  duration: string;
-  status: 'idle' | 'active' | 'completed';
-}
+import { TaskMockService } from '../../services/task-mock.service';
+import { Task } from '../../models/task.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, TaskItemComponent],
+  imports: [CommonModule, FormsModule, TaskItemComponent],
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss']
 })
-export class TaskListComponent {
-  tasks: Task[] = [
-    { 
-      id: 1, 
-      title: 'Design homepage layout', 
-      tags: ['Tag 1', 'Tag 2'], 
-      duration: '19m',
-      status: 'idle'
-    },
-    { 
-      id: 2, 
-      title: 'Design homepage layout', 
-      tags: ['Tag 1', 'Tag 2'], 
-      duration: '1h 14m',
-      status: 'active'
-    },
-    { 
-      id: 3, 
-      title: 'Design homepage layout', 
-      tags: ['Tag 1', 'Tag 2'], 
-      duration: '2h 4m',
-      status: 'idle'
-    },
-    { 
-      id: 4, 
-      title: 'Design homepage layout', 
-      tags: ['Tag 1', 'Tag 2'], 
-      duration: '43m',
-      status: 'idle'
+export class TaskListComponent implements OnInit, OnDestroy {
+  tasks: Task[] = [];
+  newTaskTitle: string = '';
+  isAddingTask: boolean = false;
+  
+  private subscription = new Subscription();
+
+  constructor(private taskService: TaskMockService) {}
+
+  ngOnInit(): void {
+    // Subscribe to tasks from the service
+    this.subscription.add(
+      this.taskService.tasks$.subscribe(tasks => {
+        this.tasks = tasks;
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    // Clean up subscriptions
+    this.subscription.unsubscribe();
+  }
+
+  addNewTask(): void {
+    this.isAddingTask = true;
+    
+    // Focus on the input field after the DOM updates
+    setTimeout(() => {
+      const inputElement = document.getElementById('newTaskInput');
+      if (inputElement) {
+        inputElement.focus();
+      }
+    }, 0);
+  }
+
+  saveNewTask(): void {
+    if (this.newTaskTitle.trim()) {
+      this.taskService.addTask(this.newTaskTitle.trim());
+      this.newTaskTitle = '';
     }
-  ];
+    this.isAddingTask = false;
+  }
+
+  cancelNewTask(): void {
+    this.newTaskTitle = '';
+    this.isAddingTask = false;
+  }
+
+  // Handle keyboard events for task input
+  onTaskInputKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      this.saveNewTask();
+    } else if (event.key === 'Escape') {
+      this.cancelNewTask();
+    }
+  }
+
+  // Handle blur event for task input
+  onTaskInputBlur(): void {
+    this.saveNewTask();
+  }
 }

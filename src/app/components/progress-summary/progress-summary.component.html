@@ -1,41 +1,26 @@
-<!-- progress-summary.component.html -->
-<div class="progress-summary-container">
-    <div class="card progress-card">
-      <h2 class="card-title">Today's Progress</h2>
-      
-      <div class="stats-container">
-        <div class="stat-box">
-          <div class="stat-value">{{ todayStats.totalTime.hours }}h {{ todayStats.totalTime.minutes }}m</div>
-          <div class="stat-label">Total time</div>
-        </div>
-        
-        <div class="stat-box">
-          <div class="stat-value">{{ todayStats.tasksCompleted }}</div>
-          <div class="stat-label">Tasks</div>
-        </div>
-      </div>
-      
-      <div class="stats-container secondary-stats">
-        <div class="stat-box">
-          <div class="stat-value">{{ todayStats.productiveTime.hours }}h {{ todayStats.productiveTime.minutes }}m</div>
-          <div class="stat-label">Productive</div>
-        </div>
-        
-        <div class="stat-box">
-          <div class="stat-value">{{ todayStats.breakTime.hours }}h</div>
-          <div class="stat-label">Break</div>
-        </div>
-      </div>
+<!-- src/app/components/progress-summary/progress-summary.component.html -->
+<div class="progress-summary card" *ngIf="progressStats">
+  <h2 class="title">Today's Progress</h2>
+  
+  <div class="summary-row">
+    <div class="main-stat">
+      <div class="stat-value">{{ progressStats.totalTime }}</div>
+      <div class="stat-label">Total time</div>
     </div>
-    
-    <div class="card work-time-card">
-      <div class="work-time-info">
-        <div class="work-time">
-          <span>Work started at {{ workTime.started }}</span>
-        </div>
-        <div class="work-time">
-          <span>Work ended at {{ workTime.ended }}</span>
-        </div>
-      </div>
+    <div class="main-counter">
+      <div class="counter-value">{{ progressStats.tasksCompleted }}</div>
+      <div class="counter-label">Tasks</div>
     </div>
   </div>
+  
+  <div class="details-row">
+    <div class="stat-item">
+      <div class="stat-value productive">{{ progressStats.productiveTime }}</div>
+      <div class="stat-label">Productive</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value break">{{ progressStats.breakTime }}</div>
+      <div class="stat-label">Break</div>
+    </div>
+  </div>
+</div>

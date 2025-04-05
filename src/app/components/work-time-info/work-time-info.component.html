@@ -1,0 +1,25 @@
+<!-- src/app/components/work-time-info/work-time-info.component.html -->
+<div class="work-time-info card" *ngIf="workTimeInfo">
+    <div class="time-row">
+      <div class="time-item">
+        <div class="time-label">Work started at</div>
+        <div class="time-value">{{ formatTime(workTimeInfo.startTime) }}</div>
+      </div>
+      
+      <div class="time-item">
+        <div class="time-label">Work ended at</div>
+        <div class="time-value">
+          {{ workTimeInfo.endTime ? formatTime(workTimeInfo.endTime) : '–' }}
+        </div>
+      </div>
+    </div>
+    
+    <div class="expected-time" *ngIf="workTimeInfo.expectedEndTime && !workTimeInfo.endTime">
+      <span class="info-icon">i</span>
+      <span class="info-text">
+        Your 8-hour workday will be completed at 
+        <strong>{{ formatTime(workTimeInfo.expectedEndTime) }}</strong>
+        (including {{ workTimeInfo.breakDuration }} min break)
+      </span>
+    </div>
+  </div>

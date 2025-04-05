@@ -25,7 +25,10 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
+  /* Increased from 1200px */
+  width: 90%;
+  /* Added to use more screen space */
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -38,20 +41,20 @@ body {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   &.btn-start {
     background-color: #F8F8F8;
     color: var(--text-color);
-    
+
     &:hover {
       background-color: #EEEEEE;
     }
   }
-  
+
   &.btn-stop {
     background-color: var(--primary-color);
     color: white;
-    
+
     &:hover {
       background-color: darken(#F0A830, 5%);
     }

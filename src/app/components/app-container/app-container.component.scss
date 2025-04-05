@@ -1,11 +1,64 @@
-/* app-container.component.scss */
-.app-container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+/* src/app/components/app-container/app-container.component.scss */
+.container {
+  max-width: 1400px;
+  width: 90%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.dashboard-grid {
+  padding: 20px 0;
+}
+
+.top-section {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.progress-card {
+  height: 100%;
+}
+
+.right-section {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 20px;
+  height: 100%;
+}
+
+.work-time-card {
+  flex-grow: 0;
+}
+
+.quote-card {
+  flex-grow: 0;
+}
+
+@media (max-width: 992px) {
+  .top-section {
+    grid-template-columns: 1fr;
   }
   
-  .main-content {
-    padding: 20px;
-    flex: 1;
+  .right-section {
+    display: grid;
+    grid-template-rows: auto auto;
+    gap: 20px;
   }
+}
+
+@media (max-width: 768px) {
+  .dashboard-grid {
+    padding: 10px 0;
+  }
+  
+  .top-section {
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .right-section {
+    gap: 15px;
+  }
+}

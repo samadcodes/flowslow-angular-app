@@ -1,4 +1,4 @@
-// navbar.component.ts
+// src/app/components/navbar/navbar.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -10,12 +10,9 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  activePage = 'Home';
-  
-  // Navigation items
-  navItems = [
-    { name: 'Home', active: true },
-    { name: 'Tasks', active: false },
-    { name: 'Reports', active: false }
-  ];
+  activeTab: string = 'tasks'; // Default active tab
+
+  setActiveTab(tab: string): void {
+    this.activeTab = tab;
+  }
 }
