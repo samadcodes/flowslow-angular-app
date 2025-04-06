@@ -1,7 +1,10 @@
 <!-- task-item.component.html -->
 <div class="task-item" 
      [ngClass]="{'active': task.status === 'active'}"
-     [@taskAnimation]>
+     [@taskAnimation]
+     [@newTaskAnimation]="isNewTask"
+     [@statusChange]="statusState"
+     [@editAnimation]="editState">
   <div class="task-info">
     <!-- Title (editable or display) -->
     <div *ngIf="!isEditingTitle" class="task-title" (dblclick)="startEditingTitle()">

@@ -137,7 +137,7 @@ export class TaskMockService {
       elapsedSeconds: 0,
       status: 'idle',
       createdAt: new Date(),
-      isNew: true
+      isNew: true // Set this flag to true for new tasks
     };
     
     this.tasksSubject.next([newTask, ...tasks]);

@@ -24,10 +24,19 @@
     font-weight: 500;
     margin-bottom: 8px;
     transition: all 0.2s ease;
+    position: relative;
+    cursor: text;
     
     &:hover {
-      cursor: pointer;
       color: var(--primary-color);
+      
+      &::after {
+        content: '✎';
+        position: absolute;
+        font-size: 14px;
+        margin-left: 8px;
+        opacity: 0.6;
+      }
     }
   }
   

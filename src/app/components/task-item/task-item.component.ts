@@ -1,4 +1,4 @@
-// task-item.component.ts
+// task-item.component.ts (Animation Section)
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,7 +8,10 @@ import {
   style, 
   animate, 
   transition, 
-  keyframes 
+  keyframes,
+  group,
+  query,
+  animateChild
 } from '@angular/animations';
 import { Task } from '../../models/task.model';
 import { Tag } from '../../models/tag.model';
@@ -21,8 +24,25 @@ import { TaskMockService } from '../../services/task-mock.service';
   templateUrl: './task-item.component.html',
   styleUrls: ['./task-item.component.scss'],
   animations: [
+    // Main task animation - separate new task animation from regular animations
     trigger('taskAnimation', [
-      transition(':enter', [
+      // Leave animation stays the same
+      transition(':leave', [
+        animate('300ms ease-out', style({ 
+          opacity: 0,
+          transform: 'scale(0.95)' 
+        }))
+      ])
+    ]),
+    
+    // New animation specifically for newly created tasks
+    trigger('newTaskAnimation', [
+      // This will only run when the task has the "isNew" flag set to true
+      state('true', style({ transform: 'scale(1)', opacity: 1 })),
+      state('false', style({ transform: 'scale(1)', opacity: 1 })),
+      
+      // Initial entry animation for new tasks
+      transition('void => true', [
         style({ 
           transform: 'scale(0.9) translateY(-30px) translateX(30px)', 
           opacity: 0,
@@ -50,12 +70,50 @@ import { TaskMockService } from '../../services/task-mock.service';
             offset: 1 
           })
         ]))
+      ])
+    ]),
+    
+    // Animation for status change (active/idle)
+    trigger('statusChange', [
+      // Define states for active and idle
+      state('idle', style({
+        transform: 'scale(1)',
+        boxShadow: 'var(--shadow)'
+      })),
+      state('active', style({
+        transform: 'scale(1)',
+        boxShadow: 'var(--shadow)'
+      })),
+      // Transition when changing from idle to active
+      transition('idle => active', [
+        animate('400ms ease-out', keyframes([
+          style({ transform: 'scale(0.98)', offset: 0.2 }),
+          style({ transform: 'scale(1.03)', boxShadow: '0 8px 20px rgba(0,0,0,0.15)', offset: 0.6 }),
+          style({ transform: 'scale(1)', offset: 1 })
+        ]))
       ]),
-      transition(':leave', [
-        animate('300ms ease-out', style({ 
-          opacity: 0,
-          transform: 'scale(0.95)' 
-        }))
+      // Transition when changing from active to idle
+      transition('active => idle', [
+        animate('400ms ease-out', keyframes([
+          style({ transform: 'scale(0.98)', offset: 0.2 }),
+          style({ transform: 'scale(1.02)', offset: 0.6 }),
+          style({ transform: 'scale(1)', offset: 1 })
+        ]))
+      ])
+    ]),
+    
+    // Animation for editing state
+    trigger('editAnimation', [
+      state('normal', style({
+        transform: 'scale(1) translateY(0)',
+        boxShadow: 'var(--shadow)'
+      })),
+      state('editing', style({
+        transform: 'scale(1.02) translateY(-3px)',
+        boxShadow: '0 8px 20px rgba(0,0,0,0.1)'
+      })),
+      transition('normal <=> editing', [
+        animate('250ms ease-out')
       ])
     ])
   ]
@@ -71,7 +129,23 @@ export class TaskItemComponent implements OnInit {
   availableTags: Tag[] = [];
   filteredTags: Tag[] = [];
   
+  // Add these getters for animation state control
+  get statusState(): string {
+    return this.task.status;
+  }
+  
+  get editState(): string {
+    return this.isEditingTitle || this.isAddingTag ? 'editing' : 'normal';
+  }
+  
+  // Getter for the newTask animation state
+  get isNewTask(): string {
+    return this.task.isNew ? 'true' : 'false';
+  }
+  
   constructor(private taskService: TaskMockService) {}
+  
+  // Rest of your component code...
   
   ngOnInit() {
     // Initialize edited title from task

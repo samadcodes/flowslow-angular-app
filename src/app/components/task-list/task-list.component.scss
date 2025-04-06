@@ -32,6 +32,7 @@
   
   &:hover {
     background-color: darken(#F0A830, 5%);
+    transform: translateY(-1px);
   }
   
   .plus-icon {
@@ -47,8 +48,12 @@
   gap: 16px;
 }
 
-.new-task-input {
-  border: 1px solid #EEEEEE;
+.new-task {
+  background-color: #FFFDF9;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--primary-color);
+  will-change: transform, box-shadow; /* Optimize for animation performance */
   
   .task-title-input {
     width: 100%;
@@ -57,16 +62,22 @@
     border: none;
     outline: none;
     padding: 4px 0;
+    background: transparent;
     
     &::placeholder {
       color: #AAAAAA;
     }
+    
+    &:focus {
+      border-color: var(--primary-color);
+    }
   }
   
-  .tag-info {
+  .hint-tag {
     font-size: 12px;
     color: #999;
     font-style: italic;
+    background-color: #f0f0f0;
   }
 }
 
