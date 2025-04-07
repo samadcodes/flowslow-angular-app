@@ -171,3 +171,22 @@
     text-align: right;
   }
 }
+
+.task-item.temporary {
+  background-color: #FFFDF9;
+  border-color: var(--primary-color);
+}
+
+.task-hint {
+  margin-top: 8px;
+  
+  .hint-tag {
+    font-size: 12px;
+    color: #999;
+    font-style: italic;
+    background-color: #f0f0f0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+}

@@ -6,5 +6,5 @@ export interface Task {
   elapsedSeconds: number; // Raw duration in seconds for calculations
   status: string; //'idle' | 'active' | 'completed';
   createdAt: Date;
-  isNew?: boolean; // For animation purposes
+  isTemporary?: boolean; // Flag for temporary tasks that are being created
 }

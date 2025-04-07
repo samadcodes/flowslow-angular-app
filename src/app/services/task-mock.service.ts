@@ -1,6 +1,6 @@
 // src/app/services/task-mock.service.ts
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, map } from 'rxjs';
 import { Task } from '../models/task.model';
 import { Tag } from '../models/tag.model';
 import { WorkTimeInfo } from '../models/work-time-info.model';
@@ -50,6 +50,13 @@ export class TaskMockService {
       createdAt: new Date()
     }
   ]);
+
+  // Event subjects for task actions
+  private taskConvertedSubject = new Subject<number>();
+  private taskRemovedSubject = new Subject<number>();
+
+  // For tracking task editing state
+  private taskEditingStates: { [taskId: number]: BehaviorSubject<boolean> } = {};
 
   // Mock data for available tags
   private tagsSubject = new BehaviorSubject<Tag[]>([
@@ -115,6 +122,106 @@ export class TaskMockService {
     return this.quoteSubject.asObservable();
   }
 
+  // Events for task actions
+  get taskConverted$(): Observable<number> {
+    return this.taskConvertedSubject.asObservable();
+  }
+
+  get taskRemoved$(): Observable<number> {
+    return this.taskRemovedSubject.asObservable();
+  }
+
+  // Get editing state for a task
+  getTaskEditingState(taskId: number): Observable<boolean> {
+    if (!this.taskEditingStates[taskId]) {
+      this.taskEditingStates[taskId] = new BehaviorSubject<boolean>(false);
+    }
+    return this.taskEditingStates[taskId].asObservable();
+  }
+
+  // Set editing state for a task
+  setTaskEditingState(taskId: number, isEditing: boolean): void {
+    if (!this.taskEditingStates[taskId]) {
+      this.taskEditingStates[taskId] = new BehaviorSubject<boolean>(false);
+    }
+    this.taskEditingStates[taskId].next(isEditing);
+  }
+
+  createTemporaryTask(): Task {
+    const tasks = this.tasksSubject.value;
+    const newId = tasks.length ? Math.max(...tasks.map(task => task.id)) + 1 : 1;
+    
+    const tempTask: Task = {
+      id: newId,
+      title: '',
+      tags: [],
+      duration: '0m',
+      elapsedSeconds: 0,
+      status: 'idle',
+      createdAt: new Date(),
+      isTemporary: true // Flag to indicate this is a temporary task
+    };
+    
+    this.tasksSubject.next([tempTask, ...tasks]);
+    return tempTask;
+  }
+  
+  // And update this method to remove any animation flags
+  convertTemporaryTask(taskId: number, title: string): void {
+    const tasks = this.tasksSubject.value;
+    const taskIndex = tasks.findIndex(t => t.id === taskId);
+    
+    if (taskIndex === -1) return;
+    
+    const task = tasks[taskIndex];
+    if (!task.isTemporary) return; // Make sure it's a temporary task
+    
+    console.log('Converting temporary task to regular task:', taskId, title);
+    
+    const updatedTask: Task = {
+      ...task,
+      title: title,
+      isTemporary: false // Remove the temporary flag
+    };
+    
+    const updatedTasks = [...tasks];
+    updatedTasks[taskIndex] = updatedTask;
+    this.tasksSubject.next(updatedTasks);
+    
+    // Update the task count in progress stats
+    const stats = this.progressStatsSubject.value;
+    this.progressStatsSubject.next({
+      ...stats,
+      tasksCompleted: stats.tasksCompleted + 1
+    });
+    
+    // Clear the editing state
+    if (this.taskEditingStates[taskId]) {
+      this.taskEditingStates[taskId].next(false);
+    }
+    
+    // Emit task converted event
+    this.taskConvertedSubject.next(taskId);
+  }
+  
+  // Remove a task
+  removeTask(taskId: number): void {
+    const tasks = this.tasksSubject.value;
+    const filteredTasks = tasks.filter(task => task.id !== taskId);
+    this.tasksSubject.next(filteredTasks);
+    
+    // Clean up the editing state
+    if (this.taskEditingStates[taskId]) {
+      delete this.taskEditingStates[taskId];
+    }
+    
+    // Stop any timers for this task
+    this.stopTaskTimer(taskId);
+    
+    // Emit task removed event
+    this.taskRemovedSubject.next(taskId);
+  }
+
   // Find a tag by name (case insensitive)
   findTagByName(name: string): Observable<Tag | undefined> {
     return this.tags$.pipe(
@@ -124,7 +231,7 @@ export class TaskMockService {
     );
   }
 
-  // Add a new task
+  // Add a new task (keeping for backward compatibility)
   addTask(title: string, tags: string[] = []): void {
     const tasks = this.tasksSubject.value;
     const newId = tasks.length ? Math.max(...tasks.map(task => task.id)) + 1 : 1;
@@ -137,7 +244,7 @@ export class TaskMockService {
       elapsedSeconds: 0,
       status: 'idle',
       createdAt: new Date(),
-      isNew: true // Set this flag to true for new tasks
+      // isNew: true
     };
     
     this.tasksSubject.next([newTask, ...tasks]);

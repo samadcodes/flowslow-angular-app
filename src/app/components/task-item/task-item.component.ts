@@ -1,5 +1,5 @@
-// task-item.component.ts (Animation Section)
-import { Component, Input, OnInit } from '@angular/core';
+// task-item.component.ts with Enter/Leave Animations
+import { Component, Input, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { 
@@ -7,15 +7,12 @@ import {
   state, 
   style, 
   animate, 
-  transition, 
-  keyframes,
-  group,
-  query,
-  animateChild
+  transition
 } from '@angular/animations';
 import { Task } from '../../models/task.model';
 import { Tag } from '../../models/tag.model';
 import { TaskMockService } from '../../services/task-mock.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-task-item',
@@ -24,102 +21,43 @@ import { TaskMockService } from '../../services/task-mock.service';
   templateUrl: './task-item.component.html',
   styleUrls: ['./task-item.component.scss'],
   animations: [
-    // Main task animation - separate new task animation from regular animations
-    trigger('taskAnimation', [
-      // Leave animation stays the same
-      transition(':leave', [
-        animate('300ms ease-out', style({ 
-          opacity: 0,
-          transform: 'scale(0.95)' 
-        }))
-      ])
-    ]),
-    
-    // New animation specifically for newly created tasks
-    trigger('newTaskAnimation', [
-      // This will only run when the task has the "isNew" flag set to true
-      state('true', style({ transform: 'scale(1)', opacity: 1 })),
-      state('false', style({ transform: 'scale(1)', opacity: 1 })),
-      
-      // Initial entry animation for new tasks
-      transition('void => true', [
-        style({ 
-          transform: 'scale(0.9) translateY(-30px) translateX(30px)', 
-          opacity: 0,
-          transformOrigin: 'top right'
-        }),
-        animate('900ms cubic-bezier(0.16, 1, 0.3, 1)', keyframes([
-          style({ 
-            opacity: 0, 
-            transform: 'scale(0.9) translateY(-30px) translateX(30px)',
-            offset: 0 
-          }),
-          style({ 
-            opacity: 0.3, 
-            transform: 'scale(0.95) translateY(-15px) translateX(15px)', 
-            offset: 0.4 
-          }),
-          style({ 
-            opacity: 0.9, 
-            transform: 'scale(1.015) translateY(0) translateX(0)', 
-            offset: 0.85 
-          }),
-          style({ 
-            opacity: 1,
-            transform: 'scale(1) translateY(0) translateX(0)', 
-            offset: 1 
-          })
-        ]))
-      ])
-    ]),
-    
-    // Animation for status change (active/idle)
-    trigger('statusChange', [
-      // Define states for active and idle
+    // EditState animation: for transitioning between edit and idle states
+    trigger('editState', [
+      // Idle state (default)
       state('idle', style({
-        transform: 'scale(1)',
-        boxShadow: 'var(--shadow)'
-      })),
-      state('active', style({
-        transform: 'scale(1)',
-        boxShadow: 'var(--shadow)'
-      })),
-      // Transition when changing from idle to active
-      transition('idle => active', [
-        animate('400ms ease-out', keyframes([
-          style({ transform: 'scale(0.98)', offset: 0.2 }),
-          style({ transform: 'scale(1.03)', boxShadow: '0 8px 20px rgba(0,0,0,0.15)', offset: 0.6 }),
-          style({ transform: 'scale(1)', offset: 1 })
-        ]))
-      ]),
-      // Transition when changing from active to idle
-      transition('active => idle', [
-        animate('400ms ease-out', keyframes([
-          style({ transform: 'scale(0.98)', offset: 0.2 }),
-          style({ transform: 'scale(1.02)', offset: 0.6 }),
-          style({ transform: 'scale(1)', offset: 1 })
-        ]))
-      ])
-    ]),
-    
-    // Animation for editing state
-    trigger('editAnimation', [
-      state('normal', style({
         transform: 'scale(1) translateY(0)',
         boxShadow: 'var(--shadow)'
       })),
-      state('editing', style({
+      
+      // Edit state (lifted up with larger shadow)
+      state('edit', style({
         transform: 'scale(1.02) translateY(-3px)',
         boxShadow: '0 8px 20px rgba(0,0,0,0.1)'
       })),
-      transition('normal <=> editing', [
-        animate('250ms ease-out')
+      
+      // Transitions between states with smooth animation
+      transition('idle <=> edit', [
+        animate('250ms cubic-bezier(0.05, 0.7, 0.1, 1.0)')
+      ])
+    ]),
+    
+    // Fade in/out animation for task appearance/removal
+    trigger('fadeInOut', [
+      // When task enters (is added to the list)
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('300ms ease-out', style({ opacity: 1 }))
+      ]),
+      // When task leaves (is removed from the list)
+      transition(':leave', [
+        animate('200ms ease-in', style({ opacity: 0 }))
       ])
     ])
   ]
 })
-export class TaskItemComponent implements OnInit {
+export class TaskItemComponent implements OnInit, OnDestroy {
   @Input() task!: Task;
+  @ViewChild('titleInput') titleInput?: ElementRef;
   
   isEditingTitle: boolean = false;
   editedTitle: string = '';
@@ -129,40 +67,54 @@ export class TaskItemComponent implements OnInit {
   availableTags: Tag[] = [];
   filteredTags: Tag[] = [];
   
-  // Add these getters for animation state control
-  get statusState(): string {
-    return this.task.status;
-  }
+  isTemporary: boolean = false;
+  private subscription = new Subscription();
   
-  get editState(): string {
-    return this.isEditingTitle || this.isAddingTag ? 'editing' : 'normal';
-  }
-  
-  // Getter for the newTask animation state
-  get isNewTask(): string {
-    return this.task.isNew ? 'true' : 'false';
+  // Get the current state for animation
+  get editStateAnimation(): string {
+    return (this.isEditingTitle || this.isAddingTag || this.isTemporary) ? 'edit' : 'idle';
   }
   
   constructor(private taskService: TaskMockService) {}
   
-  // Rest of your component code...
-  
   ngOnInit() {
     // Initialize edited title from task
-    this.editedTitle = this.task.title;
+    this.editedTitle = this.task.title || '';
+    
+    // Check if this is a temporary task
+    this.isTemporary = this.task.isTemporary === true;
+    
+    console.log('Task initialized:', this.task.id, 
+                'Title:', this.task.title, 
+                'isTemporary:', this.isTemporary);
+    
+    // If it's a temporary task, start editing automatically
+    if (this.isTemporary) {
+      setTimeout(() => {
+        this.startEditingTitle();
+      }, 10);
+    }
     
     // Subscribe to available tags
-    this.taskService.tags$.subscribe(tags => {
-      this.availableTags = tags;
-      this.filteredTags = tags;
-    });
+    this.subscription.add(
+      this.taskService.tags$.subscribe(tags => {
+        this.availableTags = tags;
+        this.filteredTags = tags;
+      })
+    );
     
-    // Remove the isNew flag after animation completes
-    if (this.task.isNew) {
-      setTimeout(() => {
-        this.task.isNew = false;
-      }, 1000);
-    }
+    // Subscribe to editing state changes
+    this.subscription.add(
+      this.taskService.getTaskEditingState(this.task.id).subscribe(isEditing => {
+        if (isEditing && !this.isEditingTitle) {
+          this.startEditingTitle();
+        }
+      })
+    );
+  }
+  
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
   
   toggleTaskStatus() {
@@ -172,8 +124,9 @@ export class TaskItemComponent implements OnInit {
   
   // Title editing methods
   startEditingTitle() {
+    console.log('Starting to edit title for task:', this.task.id);
     this.isEditingTitle = true;
-    this.editedTitle = this.task.title;
+    this.editedTitle = this.task.title || '';
     
     // Focus the input field after DOM update
     setTimeout(() => {
@@ -181,24 +134,51 @@ export class TaskItemComponent implements OnInit {
       if (inputElement) {
         inputElement.focus();
       }
-    }, 0);
+    }, 10);
   }
   
   saveEditedTitle() {
+    console.log('Saving edited title for task:', this.task.id, 'New title:', this.editedTitle);
+    
     if (this.editedTitle.trim() !== '') {
-      this.taskService.updateTaskTitle(this.task.id, this.editedTitle.trim());
+      // If this was a temporary task, convert it to a regular task
+      if (this.isTemporary) {
+        console.log('Converting temporary task to regular:', this.task.id);
+        this.taskService.convertTemporaryTask(this.task.id, this.editedTitle.trim());
+        this.isTemporary = false;
+      } else {
+        this.taskService.updateTaskTitle(this.task.id, this.editedTitle.trim());
+      }
     } else {
-      this.editedTitle = this.task.title; // Reset to original if empty
+      // If empty and temporary, remove the task
+      if (this.isTemporary) {
+        console.log('Removing empty temporary task:', this.task.id);
+        this.taskService.removeTask(this.task.id);
+        return;
+      } else {
+        this.editedTitle = this.task.title; // Reset to original if empty
+      }
     }
+    
     this.isEditingTitle = false;
   }
   
   onTitleInputKeydown(event: KeyboardEvent) {
     if (event.key === 'Enter') {
+      event.preventDefault(); // Prevent default behavior
+      console.log('Enter pressed in title input for task:', this.task.id);
       this.saveEditedTitle();
     } else if (event.key === 'Escape') {
-      this.isEditingTitle = false;
-      this.editedTitle = this.task.title; // Reset to original
+      event.preventDefault(); // Prevent default behavior
+      console.log('Escape pressed in title input for task:', this.task.id);
+      
+      // If this is a temporary task and Escape is pressed, remove it
+      if (this.isTemporary) {
+        this.taskService.removeTask(this.task.id);
+      } else {
+        this.isEditingTitle = false;
+        this.editedTitle = this.task.title; // Reset to original
+      }
     }
   }
   
@@ -215,7 +195,7 @@ export class TaskItemComponent implements OnInit {
         if (inputElement) {
           inputElement.focus();
         }
-      }, 0);
+      }, 10);
     }
   }
   
@@ -258,8 +238,10 @@ export class TaskItemComponent implements OnInit {
   
   onTagInputKeydown(event: KeyboardEvent) {
     if (event.key === 'Enter') {
+      event.preventDefault(); // Prevent default behavior
       this.createAndAddTag();
     } else if (event.key === 'Escape') {
+      event.preventDefault(); // Prevent default behavior
       this.toggleAddTag();
     }
   }

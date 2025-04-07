@@ -1,4 +1,4 @@
-<!-- task-list.component.html -->
+<!-- task-list.component.html - Simplified with no animations -->
 <div class="task-list-container">
   <div class="section-header">
     <h2 class="section-title">Today's Tasks</h2>
@@ -8,40 +8,14 @@
   </div>
   
   <div class="tasks">
-    <!-- New Task Input (shown when adding) -->
-    <div *ngIf="isAddingTask" class="task-item new-task" [@taskAnimation] [@editAnimation]="'editing'">
-      <div class="task-info">
-        <div class="task-title-edit">
-          <input 
-            id="newTaskInput"
-            type="text" 
-            class="task-title-input" 
-            placeholder="What are you working on?"
-            [(ngModel)]="newTaskTitle"
-            (keydown)="onTaskInputKeydown($event)"
-            (blur)="onTaskInputBlur()"
-            autofocus
-          >
-        </div>
-        <div class="task-tags">
-          <span class="tag hint-tag">Press Enter to add task</span>
-        </div>
-      </div>
-      
-      <div class="task-controls">
-        <button class="btn btn-start" (click)="saveNewTask()">Add</button>
-        <div class="task-duration">0m</div>
-      </div>
-    </div>
-    
-    <!-- Task List -->
+    <!-- Simple list with no entry animations -->
     <app-task-item 
       *ngFor="let task of tasks" 
       [task]="task">
     </app-task-item>
     
     <!-- Empty state when no tasks -->
-    <div *ngIf="tasks.length === 0 && !isAddingTask" class="empty-state">
+    <div *ngIf="tasks.length === 0" class="empty-state">
       <p>No tasks for today. Click the + button to add a task.</p>
     </div>
   </div>
