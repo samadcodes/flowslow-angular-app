@@ -1,0 +1,58 @@
+<!-- src/app/auth/components/auth-page/auth-page.component.html -->
+<div class="auth-container">
+  <!-- Left side with animated text -->
+  <div class="text-section">
+    <div class="brand">
+      <div class="logo-icon"></div>
+      <span class="logo-text">flowslow</span>
+    </div>
+
+    <div class="typewriter-container">
+      <app-typewriter-text [text]="inspirationalTexts[currentTextIndex]">
+      </app-typewriter-text>
+    </div>
+  </div>
+
+  <!-- Right side with auth forms -->
+  <div class="form-section">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>{{ isLoginMode ? 'Welcome back' : 'Join flowslow' }}</h2>
+        <p class="subheader">{{ isLoginMode ? 'Sign in to continue your journey' : 'Create your account' }}</p>
+      </div>
+
+      <!-- Dynamic component based on mode -->
+      @if(isLoginMode){
+      <app-login-form [returnUrl]="returnUrl" (loginSuccess)="onLoginSuccess()">
+      </app-login-form>
+      <div class="auth-footer">
+        <p>Not registered yet? <span class="link" (click)="toggleAuthMode()">Sign up</span></p>
+        <div class="divider">
+          <span>or</span>
+        </div>
+        
+        <!-- Google auth -->
+        <button class="btn-google">
+          <span class="google-icon">G</span>
+          <span>{{ isLoginMode ? 'Continue with Google' : 'Sign up with Google' }}</span>
+        </button>
+
+      </div>
+      } @else {
+      <app-signup-form (signupSuccess)="onSignupSuccess()">
+      </app-signup-form>
+      <div class="auth-footer">
+        <p>Already registered? <span class="link" (click)="toggleAuthMode()">Login</span></p>
+        <div class="divider">
+          <span>or</span>
+        </div>
+        <button class="btn-google">
+          <span class="google-icon">G</span>
+          <span>signup with google</span>
+        </button>
+      </div>
+      }
+
+    </div>
+  </div>
+</div>

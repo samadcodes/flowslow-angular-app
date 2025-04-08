@@ -1,13 +1,14 @@
 // src/app/app.component.ts
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { AppContainerComponent } from './components/app-container/app-container.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [AppContainerComponent],
+  imports: [RouterModule, AppContainerComponent],
   template: `
-    <app-container></app-container>
+    <router-outlet></router-outlet>
   `,
   styles: []
 })

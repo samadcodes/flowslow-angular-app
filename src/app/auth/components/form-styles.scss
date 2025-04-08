@@ -1,0 +1,185 @@
+// src/app/auth/components/login-form/form-styles.scss
+.auth-form {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 24px;
+  position: relative;
+  
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--text-color);
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    background-color: #f8f8f8;
+    
+    &:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(240, 168, 48, 0.1);
+      background-color: white;
+    }
+    
+    &.error {
+      border-color: #ff6b6b;
+      background-color: #fff5f5;
+    }
+    
+    &::placeholder {
+      color: #aaa;
+    }
+  }
+  
+  .error-message {
+    color: #ff6b6b;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+  
+  .auth-error {
+    background-color: #fff5f5;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    border-left: 3px solid #ff6b6b;
+  }
+  
+  .toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 38px;
+    background: none;
+    border: none;
+    font-size: 12px;
+    color: #888;
+    cursor: pointer;
+    
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  
+  .forgot-link {
+    font-size: 12px;
+    color: #888;
+    text-decoration: none;
+    
+    &:hover {
+      color: var(--primary-color);
+      text-decoration: underline;
+    }
+  }
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  
+  input {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    
+    &:checked ~ .checkmark {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      
+      &:after {
+        display: block;
+      }
+    }
+  }
+  
+  .checkmark {
+    height: 18px;
+    width: 18px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 8px;
+    position: relative;
+    transition: all 0.2s ease;
+    
+    &:after {
+      content: "";
+      position: absolute;
+      display: none;
+      left: 6px;
+      top: 2px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  }
+  
+  .label-text {
+    font-size: 14px;
+    color: #666;
+    
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.remember-me {
+  margin-bottom: 32px;
+}
+
+.terms {
+  margin-top: 16px;
+  margin-bottom: 32px;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover:not(:disabled) {
+    background-color: darken(#F0A830, 5%);
+    transform: translateY(-1px);
+  }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}

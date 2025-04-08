@@ -1,0 +1,24 @@
+<!-- src/app/components/navbar/auth-header.component.html -->
+<div class="user-menu" *ngIf="currentUser">
+    <div class="user-info" (click)="toggleDropdown()">
+        <div class="avatar">{{ getUserInitials() }}</div>
+        <span class="username">{{ currentUser.username }}</span>
+        <span class="dropdown-icon">▼</span>
+    </div>
+
+    <div class="dropdown-menu" *ngIf="isDropdownOpen">
+        <div class="dropdown-item">
+            <span class="item-icon">👤</span>
+            <span>profile</span>
+        </div>
+        <div class="dropdown-item">
+            <span class="item-icon">⚙️</span>
+            <span>settings</span>
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-item logout" (click)="logout()">
+            <span class="item-icon">🚪</span>
+            <span>logout</span>
+        </div>
+    </div>
+</div>

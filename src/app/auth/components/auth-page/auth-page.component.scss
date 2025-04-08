@@ -1,0 +1,184 @@
+/* src/app/auth/components/auth-page/auth-page.component.scss */
+.auth-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .text-section {
+    flex: 2;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  
+  .form-section {
+    flex: 1;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+  
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 120px;
+    
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background-color: white;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    
+    .logo-text {
+      font-size: 24px;
+      font-weight: 500;
+      color: white;
+    }
+  }
+  
+  .typewriter-container {
+    max-width: 80%;
+    font-size: 3.2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+  }
+  
+  .auth-card {
+    width: 100%;
+    max-width: 400px;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    padding: 40px;
+  }
+  
+  .auth-header {
+    margin-bottom: 32px;
+    text-align: center;
+    
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-color);
+      margin-bottom: 8px;
+    }
+    
+    .subheader {
+      font-size: 14px;
+      color: #777;
+    }
+  }
+  
+  .auth-footer {
+    margin-top: 24px;
+    text-align: center;
+    
+    p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 16px;
+    }
+    
+    .link {
+      color: var(--primary-color);
+      font-weight: 500;
+      cursor: pointer;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  
+  .divider {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: #e0e0e0;
+    }
+    
+    span {
+      padding: 0 10px;
+      color: #888;
+      font-size: 12px;
+    }
+  }
+  
+  .btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: #f8f8f8;
+    }
+    
+    .google-icon {
+      width: 20px;
+      height: 20px;
+      background-color: white;
+      color: #4285F4;
+      font-weight: 700;
+      font-size: 16px;
+      margin-right: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  
+  /* Responsive layout */
+  @media (max-width: 1024px) {
+    .typewriter-container {
+      font-size: 2.8rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .auth-container {
+      flex-direction: column;
+    }
+    
+    .text-section {
+      flex: 0 0 30vh;
+      padding: 40px 30px;
+    }
+    
+    .brand {
+      margin-bottom: 50px;
+    }
+    
+    .typewriter-container {
+      font-size: 2.2rem;
+      max-width: 100%;
+    }
+    
+    .form-section {
+      flex: 0 0 70vh;
+      padding: 20px;
+    }
+  }

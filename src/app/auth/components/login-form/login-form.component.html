@@ -1,0 +1,42 @@
+<!-- src/app/auth/components/login-form/login-form.component.html -->
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" formControlName="username" placeholder="Enter your username"
+            [class.error]="showErrors('username')">
+        <div class="error-message" *ngIf="showErrors('username')">
+            Username is required
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="label-row">
+            <label for="password">Password</label>
+            <!-- <a href="#" class="forgot-link">forgot password?</a> -->
+        </div>
+        <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password"
+            placeholder="Enter your password" [class.error]="showErrors('password')">
+        <button type="button" class="toggle-password" (click)="showPassword = !showPassword">
+            {{ showPassword ? 'hide' : 'show' }}
+        </button>
+        <div class="error-message" *ngIf="showErrors('password')">
+            Password is required
+        </div>
+    </div>
+
+    <div class="form-group remember-me">
+        <label class="checkbox-container">
+            <!-- <input type="checkbox" formControlName="rememberMe">
+            <span class="checkmark"></span>
+            <span class="label-text">Remember me</span> -->
+        </label>
+    </div>
+
+    <div class="error-message auth-error" *ngIf="authError">
+        {{ authError }}
+    </div>
+
+    <button type="submit" class="btn-submit" [disabled]="loginForm.invalid || isSubmitting">
+        {{ isSubmitting ? 'logging in...' : 'login' }}
+    </button>
+</form>
