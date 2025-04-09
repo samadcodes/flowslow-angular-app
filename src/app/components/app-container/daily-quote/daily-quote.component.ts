@@ -1,8 +1,8 @@
 // src/app/components/daily-quote/daily-quote.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TaskMockService } from '../../services/task-mock.service';
-import { DailyQuote } from '../../models/daily-quote.model';
+import { TaskMockService } from '../../../services/task-mock.service';
+import { DailyQuote } from '../../../models/daily-quote.model';
 import { Subscription } from 'rxjs';
 
 @Component({

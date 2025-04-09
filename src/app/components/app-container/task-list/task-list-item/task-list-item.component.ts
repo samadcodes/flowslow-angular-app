@@ -1,4 +1,4 @@
-// task-item.component.ts with Enter/Leave Animations
+// task-list-item.component.ts with Enter/Leave Animations
 import { Component, Input, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,17 +9,17 @@ import {
   animate, 
   transition
 } from '@angular/animations';
-import { Task } from '../../models/task.model';
-import { Tag } from '../../models/tag.model';
-import { TaskMockService } from '../../services/task-mock.service';
+import { Task } from '../../../../models/task.model';
+import { Tag } from '../../../../models/tag.model';
+import { TaskMockService } from '../../../../services/task-mock.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-task-item',
+  selector: 'app-task-list-item',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './task-item.component.html',
-  styleUrls: ['./task-item.component.scss'],
+  templateUrl: './task-list-item.component.html',
+  styleUrls: ['./task-list-item.component.scss'],
   animations: [
     // EditState animation: for transitioning between edit and idle states
     trigger('editState', [
@@ -55,7 +55,7 @@ import { Subscription } from 'rxjs';
     ])
   ]
 })
-export class TaskItemComponent implements OnInit, OnDestroy {
+export class TaskListItemComponent implements OnInit, OnDestroy {
   @Input() task!: Task;
   @ViewChild('titleInput') titleInput?: ElementRef;
   

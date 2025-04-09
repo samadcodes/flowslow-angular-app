@@ -1,18 +1,18 @@
-// src/app/components/navbar/auth-header.component.ts
+// src/app/components/navbar/user-menu.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { AuthService } from '../../auth/services/auth.service';
-import { User } from '../../auth/models/user.model';
+import { AuthService } from '../../../auth/services/auth.service';
+import { User } from '../../../auth/models/user.model';
 
 @Component({
-  selector: 'app-auth-header',
+  selector: 'app-user-menu',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './auth-header.component.html',
-  styleUrls: ['./auth-header.component.scss']
+  templateUrl: './user-menu.component.html',
+  styleUrls: ['./user-menu.component.scss']
 })
-export class AuthHeaderComponent implements OnInit, OnDestroy {
+export class UserMenuComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;
   isDropdownOpen = false;
   private subscription = new Subscription();

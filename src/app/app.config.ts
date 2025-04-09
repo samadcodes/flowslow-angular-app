@@ -6,6 +6,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { AuthInterceptor } from './auth/interceptors/auth.interceptor';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 export function authInterceptorFn(req: Request, next: any) {
   // const instance = new AuthInterceptor(/* dependencies would be injected here */);
@@ -23,6 +24,6 @@ export const appConfig: ApplicationConfig = {
         // For now this is commented out since we don't have the proper DI
         // authInterceptorFn
       ])
-    )
+    ), provideAnimationsAsync()
   ]
 };

@@ -13,33 +13,36 @@
       (click)="setActiveTab('home')">
       Home
     </a>
-    <a 
+    <!-- <a 
       href="#" 
       class="nav-link" 
       [class.active]="activeTab === 'tasks'"
       (click)="setActiveTab('tasks')">
       Tasks
-    </a>
+    </a> -->
     <a 
       href="#" 
       class="nav-link" 
       [class.active]="activeTab === 'reports'"
-      (click)="setActiveTab('reports')">
+      [class.disabled]="isReportsDisabled"
+      (click)="isReportsDisabled ? $event.preventDefault() : setActiveTab('reports')"
+      matTooltip="Coming soon"
+      matTooltipPosition="right">
       Reports
     </a>
   </div>
   
   <div class="nav-actions">
-    <button class="icon-btn">
+    <!-- <button class="icon-btn">
       <i class="time-icon">⏱️</i>
-    </button>
+    </button> -->
     
     <!-- Settings Button -->
-    <button class="icon-btn">
+    <!-- <button class="icon-btn">
       <i class="settings-icon">⚙️</i>
-    </button>
+    </button> -->
     
     <!-- Auth Header Component -->
-    <app-auth-header></app-auth-header>
+    <app-user-menu></app-user-menu>
   </div>
 </nav>

@@ -1,5 +1,5 @@
-/* task-item.component.scss */
-.task-item {
+/* task-list-item.component.scss */
+.task-list-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -172,7 +172,7 @@
   }
 }
 
-.task-item.temporary {
+.task-list-item.temporary {
   background-color: #FFFDF9;
   border-color: var(--primary-color);
 }

@@ -2,15 +2,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TaskItemComponent } from '../task-item/task-item.component';
-import { TaskMockService } from '../../services/task-mock.service';
-import { Task } from '../../models/task.model';
+import { TaskListItemComponent } from './task-list-item/task-list-item.component';
+import { TaskMockService } from '../../../services/task-mock.service';
+import { Task } from '../../../models/task.model';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, TaskItemComponent],
+  imports: [CommonModule, FormsModule, TaskListItemComponent],
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss']
   // No animations at list level anymore

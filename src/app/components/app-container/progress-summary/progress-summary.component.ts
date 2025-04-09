@@ -1,8 +1,8 @@
 // src/app/components/progress-summary/progress-summary.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TaskMockService } from '../../services/task-mock.service';
-import { DailyProgressStats } from '../../models/daily-progress-stats.model';
+import { TaskMockService } from '../../../services/task-mock.service';
+import { DailyProgressStats } from '../../../models/daily-progress-stats.model';
 import { Subscription } from 'rxjs';
 
 @Component({

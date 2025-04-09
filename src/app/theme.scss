@@ -1,0 +1,23 @@
+// src/app/theme.scss
+@use '@angular/material' as mat;
+
+// Define custom typography config that uses Inter font
+$custom-typography: mat.define-typography-config($font-family: '"Inter", sans-serif',
+  );
+
+// Include the core styles for Angular Material
+@include mat.core($custom-typography);
+
+// Define your theme colors (using the Cyan/Orange theme you selected)
+$primary: mat.define-palette(mat.$cyan-palette);
+$accent: mat.define-palette(mat.$orange-palette);
+
+// Create the theme object
+$theme: mat.define-light-theme((color: (primary: $primary,
+        accent: $accent,
+      ),
+      typography: $custom-typography,
+    ));
+
+// Include theme styles for all components
+@include mat.all-component-themes($theme);

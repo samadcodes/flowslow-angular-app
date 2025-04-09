@@ -1,7 +1,7 @@
 <!-- task-list.component.html - Simplified with no animations -->
 <div class="task-list-container">
   <div class="section-header">
-    <h2 class="section-title">Today's Tasks</h2>
+    <h2 class="section-title">Today's Todos</h2>
     <button class="btn-add-task" (click)="addNewTask()">
       <span class="plus-icon">+</span>
     </button>
@@ -9,10 +9,10 @@
   
   <div class="tasks">
     <!-- Simple list with no entry animations -->
-    <app-task-item 
+    <app-task-list-item 
       *ngFor="let task of tasks" 
       [task]="task">
-    </app-task-item>
+    </app-task-list-item>
     
     <!-- Empty state when no tasks -->
     <div *ngIf="tasks.length === 0" class="empty-state">
